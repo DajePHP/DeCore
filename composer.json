@@ -1,0 +1,36 @@
+{
+    "name": "DajePHP/DajePHP",
+    "type": "library",
+    "description": "The DajePHP framework",
+    "keywords": [
+        "framework"
+    ],
+    "homepage": "http://dajephp.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Giulio De Donato",
+            "email": "liuggio@gmail.com"
+        },
+        {
+            "name": "Giorgio Cefaro",
+            "email": "me@giorgiocefaro.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "psr/log": "~1.0",
+        "willdurand/stack-negotiation": "*",
+        "silpion/stack-logger": "*",
+        "asm89/stack-cors": "*",
+        "symfony/http-kernel": "*",
+        "tombzombie/dice": "*",
+        "nikic/fast-route": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DajePHP\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
