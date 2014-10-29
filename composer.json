@@ -17,6 +17,12 @@
             "email": "me@giorgiocefaro.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/DajePHP/FastRouteMiddleware"
+        }
+    ],
     "require": {
         "php": ">=5.4",
         "psr/log": "~1.0",
@@ -25,7 +31,8 @@
         "asm89/stack-cors": "*",
         "symfony/http-kernel": "*",
         "tombzombie/dice": "*",
-        "nikic/fast-route": "*"
+        "nikic/fast-route": "*",
+        "DajePHP/FastRouteMiddleware": "*"
     },
     "autoload": {
         "psr-4": {

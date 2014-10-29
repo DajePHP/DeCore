@@ -4,8 +4,60 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2cffb613ec35918227587ec9e555f229",
+    "hash": "b14e29b8edd40e34df8fa2f121bc768a",
     "packages": [
+        {
+            "name": "DajePHP/FastRouteMiddleware",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DajePHP/FastRouteMiddleware.git",
+                "reference": "b8d41655d7621ee950149ef430fbbd6072d09d80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DajePHP/FastRouteMiddleware/zipball/b8d41655d7621ee950149ef430fbbd6072d09d80",
+                "reference": "b8d41655d7621ee950149ef430fbbd6072d09d80",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/fast-route": "*",
+                "php": ">=5.4.0",
+                "symfony/http-kernel": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DajePHP\\FastRouteMiddleware\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Giorgio Cefaro",
+                    "email": "me@giorgiocefaro.com"
+                },
+                {
+                    "name": "Giulio De Donato",
+                    "email": "liuggio@gmail.com"
+                }
+            ],
+            "description": "The DajePHP FastRoute based Routing Middleware",
+            "homepage": "http://dajephp.org",
+            "keywords": [
+                "routing"
+            ],
+            "support": {
+                "source": "https://github.com/DajePHP/FastRouteMiddleware/tree/master",
+                "issues": "https://github.com/DajePHP/FastRouteMiddleware/issues"
+            },
+            "time": "2014-10-29 18:55:10"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "dev-master",

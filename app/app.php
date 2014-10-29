@@ -14,11 +14,17 @@ $dice->assign(FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/hello/{name}', 'handler');
 }));
 
-$RouterRule = new \Dice\Rule();
-$RouterRule->substitutions['FastRoute\Dispatcher'] = new \Dice\Instance('FastRoute\Dispatcher\GroupCountBased');
-$dice->addRule('DajePHP\RouterMiddleware\RouterMiddleware', $RouterRule);
+$routerRule = new \Dice\Rule();
+$routerRule->substitutions['FastRoute\Dispatcher'] = new \Dice\Instance('FastRoute\Dispatcher\GroupCountBased');
+$dice->addRule('DajePHP\FastRouteMiddleware\FastRouteMiddleware', $routerRule);
 
-$routing = $dice->create('DajePHP\RouterMiddleware\RouterMiddleware');
+$routing = $dice->create('DajePHP\FastRouteMiddleware\FastRouteMiddleware');
 
-$response = $routing->handle(\Symfony\Component\HttpFoundation\Request::createFromGlobals());
+$negotiationRule = new \Dice\Rule();
+$negotiationRule->substitutions['Symfony\Component\HttpKernel\HttpKernelInterface'] = new \Dice\Instance('DajePHP\FastRouteMiddleware\FastRouteMiddleware');
+$dice->addRule('Negotiation\Stack\Negotiation', $negotiationRule);
+
+$negotiation = $dice->create('Negotiation\Stack\Negotiation');
+
+$response = $negotiation->handle(\Symfony\Component\HttpFoundation\Request::createFromGlobals());
 $response->send();
