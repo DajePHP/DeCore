@@ -1,7 +1,7 @@
 {
-    "name": "DajePHP/DajePHP",
+    "name": "daje/de-core",
     "type": "library",
-    "description": "The DajePHP framework",
+    "description": "The DajePHP core",
     "keywords": [
         "framework"
     ],
@@ -26,6 +26,7 @@
     "require": {
         "php": ">=5.4",
         "psr/log": "~1.0",
+        "stack/builder": "*",
         "willdurand/stack-negotiation": "*",
         "silpion/stack-logger": "*",
         "asm89/stack-cors": "*",
@@ -34,9 +35,15 @@
         "nikic/fast-route": "*",
         "DajePHP/FastRouteMiddleware": "*"
     },
+    "require-dev": {
+        "behat/behat": "~3"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
     "autoload": {
         "psr-4": {
-            "DajePHP\\": "src/"
+            "Daje\\HttpKernel\\": "src/"
         }
     },
     "minimum-stability": "dev"

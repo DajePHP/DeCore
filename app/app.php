@@ -1,30 +1,25 @@
 <?php
 
-require_once '../vendor/autoload.php';
+// Front controller
 
-use Dice\Dice;
+use Symfony\Component\HttpFoundation\Request;
+use DajePHP\FastRouteMiddleware\FastRouteMiddleware;
+use \Daje\HttpKernel\Env;
+$loader = require_once __DIR__.'/../vendor/autoload.php';
 
-function handler($params) {
-    return new \Symfony\Component\HttpFoundation\Response('Hello ' . $params['name']);
-}
+require_once __DIR__.'/AppKernel.php';
+require_once __DIR__.'/HelloController.php';
 
-$dice = new Dice();
+$dispatcher = \FastRoute\simpleDispatcher(function(\FastRoute\RouteCollector $r) {
+        $r->addRoute('GET', '/hello/{name}', 'HelloController::get');
+});
 
-$dice->assign(FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/hello/{name}', 'handler');
-}));
+$app = new FastRouteMiddleware($dispatcher);
 
-$routerRule = new \Dice\Rule();
-$routerRule->substitutions['FastRoute\Dispatcher'] = new \Dice\Instance('FastRoute\Dispatcher\GroupCountBased');
-$dice->addRule('DajePHP\FastRouteMiddleware\FastRouteMiddleware', $routerRule);
+$kernel = new AppKernel($app, Env::Prod());
 
-$routing = $dice->create('DajePHP\FastRouteMiddleware\FastRouteMiddleware');
-
-$negotiationRule = new \Dice\Rule();
-$negotiationRule->substitutions['Symfony\Component\HttpKernel\HttpKernelInterface'] = new \Dice\Instance('DajePHP\FastRouteMiddleware\FastRouteMiddleware');
-$dice->addRule('Negotiation\Stack\Negotiation', $negotiationRule);
-
-$negotiation = $dice->create('Negotiation\Stack\Negotiation');
-
-$response = $negotiation->handle(\Symfony\Component\HttpFoundation\Request::createFromGlobals());
+Request::enableHttpMethodParameterOverride();
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
 $response->send();
+
