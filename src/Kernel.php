@@ -2,18 +2,16 @@
 
 namespace Daje\HttpKernel;
 
-use DajePHP\FastRouteMiddleware\FastRouteMiddleware;
 use Stack\Builder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Stack\Builder as StackBuilder;
 
-abstract class Kernel implements KernelInterface
+abstract class Kernel implements KernelInterface, HttpKernelInterface
 {
     protected $stackBuilder;
     protected $rootDir;
     protected $environment;
-    protected $debug;
     protected $booted = false;
     protected $kernel;
     protected $startTime;
@@ -21,20 +19,19 @@ abstract class Kernel implements KernelInterface
     /**
      * Constructor.
      *
-     * @param string  $environment The environment
-     * @param bool    $debug       Whether to enable debugging or not
+     * @param HttpKernelInterface $app
+     * @param Env $environment
      *
      * @api
      */
-    public function __construct($environment, $debug)
+    public function __construct(HttpKernelInterface $app, Env $environment)
     {
         $this->environment = $environment;
-        $this->debug = (bool) $debug;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
         $this->stackBuilder = new StackBuilder();
 
-        if ($this->debug) {
+        if ($this->isDebug()) {
             $this->startTime = microtime(true);
         }
     }
@@ -42,7 +39,7 @@ abstract class Kernel implements KernelInterface
 
     public function __clone()
     {
-        if ($this->debug) {
+        if ($this->isDebug()) {
             $this->startTime = microtime(true);
         }
 
@@ -65,14 +62,15 @@ abstract class Kernel implements KernelInterface
 
     public function serialize()
     {
-        return serialize(array($this->environment, $this->debug));
+       // @todo
+        //return serialize(array($this->environment, $this->debug));
     }
 
     public function unserialize($data)
     {
-        list($environment, $debug) = unserialize($data);
-
-        $this->__construct($environment, $debug);
+        // @todo
+        //list($app, $environment, $debug) = unserialize($data);
+        //$this->__construct($app, $environment, $debug);
     }
 
     /**
@@ -128,13 +126,7 @@ abstract class Kernel implements KernelInterface
      */
     public function resolveStack()
     {
-        $dispatcher = \FastRoute\simpleDispatcher(function(\FastRoute\RouteCollector $r) {
-                $r->addRoute('GET', '/hello/{name}', 'HelloController::get');
-
-        });
-
-        $app = new FastRouteMiddleware($dispatcher);
-        return $this->stackBuilder->resolve($app);
+        return $this->stackBuilder->resolve($this->app);
     }
 
     /**
@@ -168,7 +160,7 @@ abstract class Kernel implements KernelInterface
      */
     public function isDebug()
     {
-        return $this->debug;
+        return $this->environment->isDebug();
     }
 
     /**
@@ -193,7 +185,7 @@ abstract class Kernel implements KernelInterface
      */
     public function getStartTime()
     {
-        return $this->debug ? $this->startTime : -INF;
+        return $this->isDebug() ? $this->startTime : -INF;
     }
 
     /**
